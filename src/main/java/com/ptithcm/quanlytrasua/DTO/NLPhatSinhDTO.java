@@ -8,11 +8,12 @@ public class NLPhatSinhDTO {
     private String manl;
     private String tennl;
     private String ngay;
-    private int soluong;
+    private float soluong;
     private String mota;
+    private String donvi;
     public NLPhatSinhDTO(){}
 
-    public NLPhatSinhDTO(String manv, String tennv, String manl, String tennl, String ngay, int soluong, String mota) {
+    public NLPhatSinhDTO(String manv, String tennv, String manl, String tennl, String ngay, float soluong, String mota, String donvi) {
         this.manv = manv;
         this.tennv = tennv;
         this.manl = manl;
@@ -20,6 +21,15 @@ public class NLPhatSinhDTO {
         this.ngay = ngay;
         this.soluong = soluong;
         this.mota = mota;
+        this.donvi = donvi;
+    }
+
+    public String getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(String donvi) {
+        this.donvi = donvi;
     }
 
     public String getManv() {
@@ -63,11 +73,11 @@ public class NLPhatSinhDTO {
         this.ngay = ngay;
     }
 
-    public int getSoluong() {
+    public float getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(int soluong) {
+    public void setSoluong(float soluong) {
         this.soluong = soluong;
     }
 

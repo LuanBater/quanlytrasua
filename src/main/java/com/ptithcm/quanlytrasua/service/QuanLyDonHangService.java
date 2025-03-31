@@ -28,9 +28,7 @@ public class QuanLyDonHangService {
         DTO.setTennv((String) map.get("TENNV"));
         DTO.setMakh((String) map.get("MAKH"));
         DTO.setTenkh((String) map.get("TENKH"));
-        DTO.setDiachi((String) map.get("DIACHI"));
         DTO.setThanhtoan(Integer.parseInt(map.get("THANHTOAN").toString()));
-        DTO.setSdt((String) map.get("SDT"));
         return DTO;
     }
     public CTDonHang mapCTDH (Map<String , Object> map)
@@ -102,6 +100,12 @@ public class QuanLyDonHangService {
         }
         return  list;
     }
+    public String kiemTraTrangThai(int madonhang){
+
+        String data = repository.kiemTraTrangThai(madonhang);
+       return data;
+
+    }
     public List<CTTopping> getListCTTopping(int idctdh){
 
         List<Map<String,Object>> data = repository.getListCTTopping(idctdh);
@@ -114,18 +118,41 @@ public class QuanLyDonHangService {
         return  list;
     }
     public int taoDonHang(OrderRequest orderRequest) throws JsonProcessingException {
+        // Chuyển đổi danh sách sản phẩm thành JSON string
         String listNguyenLieuJson = objectMapper.writeValueAsString(orderRequest.getList_sanpham());
+
+        // Gọi stored procedure và lấy mã đơn hàng mới
+        Integer orderId = repository.taoDonHang(orderRequest.getManv(), orderRequest.getThanhtoan(), listNguyenLieuJson);
+
+        if (orderId != null) {
+            return orderId;  // Trả về mã đơn hàng nếu thành công
+        } else {
+            return 0;  // Trả về 0 nếu thất bại
+        }
+    }
+
+
+    public int duyetDonHang(String manv, int madonhang){
         try {
-            repository.taoDonHang(orderRequest.getMakh(),orderRequest.getSdt(),orderRequest.getDiachi(),orderRequest.getThanhtoan(),listNguyenLieuJson);
+            repository.duyetDonHang(manv,madonhang);
+            return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
-        return 1;
+
     }
-    public int duyetDonHang(String manv, int madonhang){
+    public int KiemTraSoLuongSanPhamKhaDung(String masp, String masize){
+        Integer temp = repository.KiemTraSoLuongSanPhamKhaDung(masp,masize);
+        if(temp != null)
+        {
+            return temp;
+        }
+        else return -1;
+    }
+    public int donHangThatBai( int madonhang){
         try {
-            repository.duyetDonHang(manv,madonhang);
+            repository.donHangThatBai(madonhang);
             return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
@@ -142,5 +169,15 @@ public class QuanLyDonHangService {
             return 0;
         }
         return 1;
+    }
+    public int xoaDonHang(int madonhang){
+        try {
+            repository.XoaDonHang(madonhang);
+            return 1;
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+
     }
 }

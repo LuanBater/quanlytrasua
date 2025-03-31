@@ -38,7 +38,7 @@ public class Config {
     public static String Sha256(String message) {
         String digest = null;
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
             byte[] hash = md.digest(message.getBytes("UTF-8"));
             StringBuilder sb = new StringBuilder(2 * hash.length);
             for (byte b : hash) {

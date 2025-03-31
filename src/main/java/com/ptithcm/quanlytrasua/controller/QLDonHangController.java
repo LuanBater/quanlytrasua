@@ -1,16 +1,28 @@
 package com.ptithcm.quanlytrasua.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptithcm.quanlytrasua.DTO.*;
+import com.ptithcm.quanlytrasua.momo.MomoModel;
+import com.ptithcm.quanlytrasua.momo.ResultMoMo;
+import com.ptithcm.quanlytrasua.momo.utils.Constant;
+import com.ptithcm.quanlytrasua.momo.utils.Decode;
 import com.ptithcm.quanlytrasua.service.QuanLyDonHangService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/don-hang")
@@ -33,6 +45,12 @@ public class QLDonHangController {
         }
 
         return ResponseEntity.ok(list);
+    }
+    @GetMapping("/kiem-tra-trang-thai")
+    public ResponseEntity<String> kiemTraTrangThai(@RequestParam("madonhang") int madonhang) {
+        String data = QLDHservice.kiemTraTrangThai(madonhang);
+
+        return ResponseEntity.ok(data);
     }
     @GetMapping("/lay-danh-sach-hoa-don")
     public ResponseEntity<List<HoaDonDTO>> getListHoaDon() {
@@ -153,21 +171,41 @@ public class QLDonHangController {
         return ResponseEntity.ok(listOUT);
     }
     @RequestMapping(value = "/tao-don-hang", method = RequestMethod.POST)
-    public ResponseEntity<String> taoDonHang(@Validated @RequestBody OrderRequest DTO) throws JsonProcessingException {
+    public ResponseEntity<Map<String, Object>> taoDonHang(@Validated @RequestBody OrderRequest DTO) throws JsonProcessingException {
+        Map<String, Object> response = new HashMap<>();
 
-        int x = QLDHservice.taoDonHang(DTO);
-        if (x == 1)
-            return new ResponseEntity<>("Thành công", HttpStatus.OK);
-        return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
-    }
-    @RequestMapping(value = "/duyet-don-hang", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaNL(@RequestParam("manv") String manv,@RequestParam("madonhang") int madh) {
-        if (QLDHservice.duyetDonHang(manv,madh) == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("thất bại");
+        int orderId = QLDHservice.taoDonHang(DTO);
+
+        if (orderId > 0) {
+            if (DTO.getThanhtoan()==1)
+            {
+                List<DonHangDTO> list = QLDHservice.getListDonHang();
+
+                for(DonHangDTO dh : list)
+                {
+                    if (dh.getMadonhang() == orderId)
+                    {
+                        List<CTDonHang> ctDonHangs = QLDHservice.getListCTDH(dh.getMadonhang());
+                        for (CTDonHang ct : ctDonHangs)
+                        {
+                            List<CTTopping> ctToppings = QLDHservice.getListCTTopping(ct.getIdctdh());
+                            ct.setListCT_Topping(ctToppings);
+                        }
+                        HoanThanhDonHang temp = new HoanThanhDonHang(orderId,ctDonHangs);
+                        QLDHservice.hoanThanhDonHang(temp);
+                        break;
+                    }
+
+
+                }
+            }
+            System.out.println(orderId);
+            response.put("message", "Thành công");
+            response.put("orderId", orderId); // Trả về mã đơn hàng
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("thành công");
+            response.put("message", "Thất bại");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
     @RequestMapping(value = "/hoan-thanh-don-hang", method = RequestMethod.POST)
@@ -178,4 +216,19 @@ public class QLDonHangController {
             return new ResponseEntity<>("Thành công", HttpStatus.OK);
         return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
     }
-}
+
+    @RequestMapping(value = "/xoa-don-hang", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaDonHang(@RequestParam("madonhang") int madonhang) {
+        if (QLDHservice.xoaDonHang(madonhang) == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Xóa thất bại");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Xóa thành công");
+        }
+    }
+    @RequestMapping(value = "/kiem-tra-kha-dung", method = RequestMethod.GET)
+    public int kiemTraKhaDung(@RequestParam("masp") String masp,@RequestParam("masize") String masize) {
+        return QLDHservice.KiemTraSoLuongSanPhamKhaDung(masp,masize);
+    }
+    }

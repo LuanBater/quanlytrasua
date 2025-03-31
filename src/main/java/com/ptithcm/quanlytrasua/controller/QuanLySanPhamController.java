@@ -40,15 +40,7 @@ public class QuanLySanPhamController {
         if (maloai.equals("ALL")) maloai = null;
         return  ResponseEntity.ok(QLSPservice.getlistSPBan(maloai));
     }
-    @GetMapping("/lay-danh-sach-sp-ha-gia")
-    public ResponseEntity<List<ThongTinSanPhamDTO>> getlistSPKM() {
-        List<ThongTinSanPhamDTO> list = QLSPservice.getlistSPBan(null);
-        List<ThongTinSanPhamDTO> listKm = new ArrayList<>();
-        for(ThongTinSanPhamDTO sp : list){
-           if ( sp.getTylegiam() > 0)  listKm.add(sp);
-        }
-        return  ResponseEntity.ok(listKm);
-    }
+
     @GetMapping("/lay-danh-sach-topping")
     public ResponseEntity<List<ToppingBan>> getListTopping() {
         List<ToppingBan> list = QLSPservice.getlistTopping();
@@ -69,14 +61,10 @@ public class QuanLySanPhamController {
         List<BangGiaDTO> list = QLSPservice.getlistBGKhaDung();
         return ResponseEntity.ok(list);
     }
-    @GetMapping("/lay-bang-gia-khuyen-mai")
-    public ResponseEntity<List<BangGiaDTO>> getListBGKhuyenMai() {
-        List<BangGiaDTO> list = QLSPservice.getlistBGKhuyenMai();
-        return ResponseEntity.ok(list);
-    }
-    @GetMapping("/lay-gia-sp")
-    public ResponseEntity<CT_GiaDTO> xemHP(@RequestParam("masp") String masp, @RequestParam("masize") String masize) {
-        return  ResponseEntity.ok(QLSPservice.getGiaSP(masp,masize));
+
+    @GetMapping("/lay-chi-tiet-gia")
+    public ResponseEntity<List<CT_GiaDTO>> xemHP(@RequestParam("masp") String masp, @RequestParam("maloai") String maloai) {
+        return  ResponseEntity.ok(QLSPservice.getGiaSP(masp,maloai));
     }
     @GetMapping("/lay-cong-thuc-sp")
     public ResponseEntity<List<CongThucDTO>> xemCongThuc(@RequestParam("masp") String masp) {
@@ -108,26 +96,8 @@ public class QuanLySanPhamController {
             return new ResponseEntity<>("Thêm công thức thành công", HttpStatus.OK);
         return new ResponseEntity<>("Thêm công thức thất bại", HttpStatus.BAD_REQUEST);
     }
-    @RequestMapping(value = "/update-khuyen-mai", method = RequestMethod.POST)
-    public ResponseEntity<String> updateKhuyeMai(@RequestBody UpdateKhuyenMaiDTO DTO
-    )
-    {
 
-        int x = QLSPservice.updateKhuyenMai(DTO);
-        if (x == 1)
-            return new ResponseEntity<>("update khuyến mãi thành công", HttpStatus.OK);
-        return new ResponseEntity<>("update khuyến mãi thất bại", HttpStatus.BAD_REQUEST);
-    }
-    @RequestMapping(value = "/xoa-khuyen-mai", method = RequestMethod.GET)
-    public ResponseEntity<String> xoaKhuyeMai(@RequestParam String mabg, @RequestParam int idctspM,@RequestParam int idctspL
-                                                 )
-    {
 
-        int x = QLSPservice.xoaKhuyenMai(mabg,idctspM,idctspL);
-        if (x == 1)
-            return new ResponseEntity<>("xóa khuyến mãi thành công", HttpStatus.OK);
-        return new ResponseEntity<>("xóa khuyến mãi thất bại", HttpStatus.BAD_REQUEST);
-    }
     @RequestMapping(value = "/change-gia", method = RequestMethod.GET)
     public ResponseEntity<String> changeGia(@RequestParam String maloai,@RequestParam int giaM,@RequestParam int giaL, @RequestParam int idctspM,@RequestParam int idctspL
     )
@@ -137,6 +107,22 @@ public class QuanLySanPhamController {
         if (x == 1)
             return new ResponseEntity<>("thay đổi giá thành công", HttpStatus.OK);
         return new ResponseEntity<>("thay đổi giá thất bại", HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value = "/them-chi-tiet-gia", method = RequestMethod.POST)
+    public ResponseEntity<String> themChiTietGia(@Validated @RequestBody CT_GiaDTO DTO,@RequestParam("maloai") String maloai) {
+
+        int x = QLSPservice.themChiTietGia(DTO,maloai);
+        if (x == 1)
+            return new ResponseEntity<>("Thành công", HttpStatus.OK);
+        return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
+    }
+    @RequestMapping(value = "/update-chi-tiet-gia", method = RequestMethod.POST)
+    public ResponseEntity<String> updateChiTietGia(@Validated @RequestBody CT_GiaDTO DTO,@RequestParam("maloai") String maloai) {
+
+        int x = QLSPservice.updateChiTietGia(DTO,maloai);
+        if (x == 1)
+            return new ResponseEntity<>("Thành công", HttpStatus.OK);
+        return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
     }
     @RequestMapping(value = "/them-san-pham", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> themSP(@RequestParam("sp") String spString,
@@ -249,6 +235,16 @@ public class QuanLySanPhamController {
                     .body("Xóa thành công");
         }
     }
+    @RequestMapping(value = "/xoa-chi-tiet-gia", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaCTG(@RequestParam("mabg") String mabg,@RequestParam("masp") String masp,@RequestParam("maloai") String maloai) {
+        if (QLSPservice.xoaChiTietGia(mabg,masp,maloai) == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Xóa thất bại");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("Xóa thành công");
+        }
+    }
     @RequestMapping(value = "/xoa-cong-thuc", method = RequestMethod.GET)
     public ResponseEntity<?> xoaCongThuc(@RequestParam("masp") String masp) {
         if (QLSPservice.xoaCongThuc(masp) == 0) {
@@ -268,30 +264,7 @@ public class QuanLySanPhamController {
                 .contentType(contentType)
                 .body(new InputStreamResource(in));
     }
-    @RequestMapping(value = "/them-bang-gia-khuyen-mai", method = RequestMethod.POST)
-    public ResponseEntity<String> themBGKM(@Validated @RequestBody BangGiaDTO DTO) {
 
-        int x = QLSPservice.themBangGiaKM(DTO);
-        if (x == 1)
-            return new ResponseEntity<>("Thành công", HttpStatus.OK);
-        return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
-    }
-    @RequestMapping(value = "/update-bang-gia", method = RequestMethod.POST)
-    public ResponseEntity<String> updateNLPS(@Validated @RequestBody BangGiaDTO DTO) {
 
-        int x = QLSPservice.updateBangGiaKM(DTO);
-        if (x == 1)
-            return new ResponseEntity<>("Thành công", HttpStatus.OK);
-        return new ResponseEntity<>("Thất bại", HttpStatus.BAD_REQUEST);
-    }
-    @RequestMapping(value = "/xoa-bang-gia", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaBangGia(@RequestParam("mabg") String mabg) {
-        if (QLSPservice.xoaBangGia(mabg) == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Xóa thất bại");
-        } else {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("Xóa thành công");
-        }
-    }
+
 }

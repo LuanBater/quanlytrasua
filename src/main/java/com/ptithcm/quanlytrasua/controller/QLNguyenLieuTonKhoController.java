@@ -32,13 +32,30 @@ public class QLNguyenLieuTonKhoController {
     @Autowired
     QLNguyenLieuTonKhoService QLNLservice;
     @GetMapping("/lay-danh-sach-nguyen-lieu")
-    public ResponseEntity<List<NguyenLieuDTO>> getListTL() {
+    public ResponseEntity<List<NguyenLieuDTO>> getlistNL() {
         List<NguyenLieuDTO> list = QLNLservice.getlistNL();
+        return ResponseEntity.ok(list);
+    }
+    @GetMapping("/lay-nguyen-lieu-hien-co")
+    public ResponseEntity<List<NguyenLieuDTO>> getlistNLHienCo() {
+        List<NguyenLieuDTO> list = QLNLservice.getlistNL();
+        for (int i = 0 ; i< list.size();i++)
+        {
+            if(list.get(i).getSoluongton()<= 0)
+            {
+                list.remove(i);
+            }
+        }
         return ResponseEntity.ok(list);
     }
     @GetMapping("/lay-nguyen-lieu-phat-sinh")
     public ResponseEntity<List<NLPhatSinhDTO>> getListNLPS() {
         List<NLPhatSinhDTO> list = QLNLservice.getlistNLPS();
+        return ResponseEntity.ok(list);
+    }
+    @GetMapping("/lay-chi-tiet-nhap-nguyen-lieu")
+    public ResponseEntity<List<ChiTietNhapNL>> getChiTietNhapNL(@RequestParam("manl") String manl ){
+        List<ChiTietNhapNL> list = QLNLservice.getlistCTNhapNL(manl);
         return ResponseEntity.ok(list);
     }
 
@@ -208,6 +225,11 @@ public class QLNguyenLieuTonKhoController {
         List<PhieuNhapShow> list = QLNLservice.getlistPN();
         return ResponseEntity.ok(list);
     }
+    @GetMapping("/lay-san-pham-kha-dung")
+    public ResponseEntity<List<SanPhamKhaDung>> getListKhaDung() {
+        List<SanPhamKhaDung> list = QLNLservice.getListKhaDung();
+        return ResponseEntity.ok(list);
+    }
     @GetMapping("/lay-danh-sach-nha-cung-cap")
     public ResponseEntity<List<NhaCungCapDTO>> getListNCC() {
         List<NhaCungCapDTO> list = QLNLservice.getlistNCC();
@@ -257,6 +279,16 @@ public class QLNguyenLieuTonKhoController {
         } else {
             return ResponseEntity.status(HttpStatus.OK)
                     .body("Xóa thành công");
+        }
+    }
+    @RequestMapping(value = "/change-status-nguyen-lieu", method = RequestMethod.GET)
+    public ResponseEntity<?> changeTrangThai(@RequestParam("manl") String manl) {
+        if (QLNLservice.changeTrangThai(manl) == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("thay đổi thất bại");
+        } else {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("thay đổi thành công");
         }
     }
 }

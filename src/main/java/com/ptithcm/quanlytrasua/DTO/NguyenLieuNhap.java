@@ -1,18 +1,23 @@
 package com.ptithcm.quanlytrasua.DTO;
 
 public class NguyenLieuNhap {
+
     private String manl;
     private  String tennl;
-    private int soluong;
+    private Float soluong;
+    private String donvi;
     private int gianhap;
+
+
     public  NguyenLieuNhap(){
 
     }
 
-    public NguyenLieuNhap(String manl, String tennl, int soluong, int gianhap) {
+    public NguyenLieuNhap(String manl, String tennl, Float soluong, String donvi,int gianhap) {
         this.manl = manl;
         this.tennl = tennl;
         this.soluong = soluong;
+        this.donvi = donvi;
         this.gianhap = gianhap;
     }
 
@@ -40,11 +45,19 @@ public class NguyenLieuNhap {
         this.tennl = tennl;
     }
 
-    public int getSoluong() {
+    public Float getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(int soluong) {
+    public void setSoluong(Float soluong) {
         this.soluong = soluong;
+    }
+
+    public String getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(String donvi) {
+        this.donvi = donvi;
     }
 }

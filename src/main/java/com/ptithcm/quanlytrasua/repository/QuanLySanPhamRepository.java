@@ -54,45 +54,37 @@ public interface QuanLySanPhamRepository extends JpaRepository<SanPham, String> 
     void updateCongThuc(
             @Param("p_masp") String masp,
             @Param("p_manl") String manl,
-            @Param("p_soluong") int soluong,
+            @Param("p_soluong") float soluong,
             @Param("p_mota") String mota
     );
-    @Procedure(procedureName = "SP_CapNhatKhuyenMai")
-    void updateKhuyenMai(
-            @Param("p_mabg_cu") String mabgcu,
-            @Param("p_mabg_moi") String mabgmoi,
-            @Param("giaM") int giaM,
-            @Param("giaL") int giaL,
-            @Param("IDCTSPM") int idctspM,
-            @Param("IDCTSPL") int idctspL
-    );
-    @Procedure(procedureName = "SP_XoaKhuyenMai")
-    void xoaKhuyenMai(
+
+
+
+    @Procedure(procedureName = "SP_ThemBangGia")
+    void themChiTietGia(
             @Param("p_mabg") String mabg,
-            @Param("p_idctspM") int idctspM,
-            @Param("p_idctspL") int idctspL
-    );
-    @Procedure(procedureName = "SP_ThemBangGiaKhuyenMai")
-    void themBangGiaKM(
-            @Param("p_mabg") String mabg,
-            @Param("p_tenbg") String tenbg,
-            @Param("p_tylegiam") int tylegiam,
-            @Param("p_ngayapdung") String ngayapdung,
-            @Param("p_ngaykt") String ngaykt,
-            @Param("p_manv") String manv,
-            @Param("p_loaigia") String loaigia
+            @Param("p_masp") String masp,
+            @Param("p_maloai") String maloai,
+            @Param("p_giasizeM") int giasizeM,
+            @Param("p_giasizeL") int giasizeL,
+            @Param("p_ngayapdung") String ngayApDung,
+            @Param("p_ngaykt") String ngayKetThuc
     );
     @Procedure(procedureName = "SP_CapNhatBangGia")
-    void updateBangGia(
+    void updateChiTietGia(
             @Param("p_mabg") String mabg,
-            @Param("p_tenbg") String tenbg,
-            @Param("p_tylegiam") int tylegiam,
-            @Param("p_ngayapdung") String ngayapdung,
-            @Param("p_ngaykt") String ngaykt
+            @Param("p_masp") String masp,
+            @Param("p_maloai") String maloai,
+            @Param("p_giasizeM") int giasizeM,
+            @Param("p_giasizeL") int giasizeL,
+            @Param("p_ngayapdung") String ngayApDung,
+            @Param("p_ngaykt") String ngayKetThuc
     );
     @Procedure(procedureName = "SP_XoaBangGia")
-    void xoaBangGia(
-            @Param("p_mabg") String mabg
+    void xoaChiTietGia(
+            @Param("p_mabg") String mabg,
+            @Param("p_masp") String masp,
+            @Param("p_maloai") String maloai
     );
     @Procedure(procedureName = "SP_ThayDoiGia")
     void changeGia(
@@ -117,13 +109,12 @@ public interface QuanLySanPhamRepository extends JpaRepository<SanPham, String> 
     public List<Map<String, Object>> getListTheLoai();
     @Query(value = "{call SP_LayCongThuc (:p_masp)}", nativeQuery = true)
     public List<Map<String, Object>> getCongThucSanPham(@Param("p_masp") String masp);
-    @Query(value = "{call SP_LayChiTietGia(:p_masp, :p_masize)}", nativeQuery = true)
-    public List<Map<String, Object>> getGiaSanPham(@Param("p_masp") String masp,@Param("p_masize") String masize);
+    @Query(value = "{call SP_LayChiTietGia(:p_masp, :p_maloai)}", nativeQuery = true)
+    public List<Map<String, Object>> getGiaSanPham(@Param("p_masp") String masp,@Param("p_maloai") String maloai);
     @Query(value = "{call SP_LayDanhSachBangGia}", nativeQuery = true)
     public List<Map<String, Object>> getListBangGia();
     @Query(value = "{call SP_GiaKhaDung}", nativeQuery = true)
     public List<Map<String, Object>> getListGiaKhaDung();
-    @Query(value = "{call SP_LayBangGiaKhuyenMai}", nativeQuery = true)
-    public List<Map<String, Object>> getListGiaKhuyenMai();
+
 
 }

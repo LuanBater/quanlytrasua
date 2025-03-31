@@ -16,18 +16,27 @@ import java.util.Map;
 public interface QuanLyNguyenLieuTonKhoRepository extends JpaRepository<NguyenLieu, String> {
     @Query(value = "{call SP_LayDanhSachNguyenLieu}", nativeQuery = true)
     public List<Map<String, Object>> getListNguyenLieu();
-
+    @Procedure(procedureName = "SP_ChangeTrangThaiNguyenLieu")
+    void changeTrangThai(
+            @Param("p_manl") String manl
+    );
     @Procedure(procedureName = "SP_ThemNguyenLieuMoi")
     void themNL(
             @Param("p_manl") String manl,
             @Param("p_tennl") String tennl,
-            @Param("p_hinhanh") String hinhanh
+            @Param("p_hinhanh") String hinhanh,
+            @Param("p_soluongton") Float soluongton,
+            @Param("p_donvi") String donvi,
+            @Param("p_gioihanton") Float gioihanton
     );
     @Procedure(procedureName = "SP_CapNhatNguyenLieu")
     void updateNL(
             @Param("p_manl") String masp,
             @Param("p_tennl") String tennl,
-            @Param("p_hinhanh") String hinhanh
+            @Param("p_hinhanh") String hinhanh,
+            @Param("p_soluongton") Float soluongton,
+            @Param("p_donvi") String donvi,
+            @Param("p_gioihanton") Float gioihanton
     );
     @Procedure(procedureName = "SP_XoaNguyenLieu")
     void xoaNL(
@@ -51,7 +60,7 @@ public interface QuanLyNguyenLieuTonKhoRepository extends JpaRepository<NguyenLi
             @Param("p_manl") String manl,
             @Param("p_manv") String manv,
             @Param ("p_ngay") String ngay,
-            @Param ("p_soluong") int soluong,
+            @Param ("p_soluong") float soluong,
             @Param ("p_mota") String mota
     );
     @Procedure(procedureName = "SP_CapNhatNguyenLieuPhatSinh")
@@ -60,7 +69,7 @@ public interface QuanLyNguyenLieuTonKhoRepository extends JpaRepository<NguyenLi
             @Param("p_manl") String manl,
             @Param("p_manv") String manv,
             @Param ("p_ngay") String ngay,
-            @Param ("p_soluong") int soluong,
+            @Param ("p_soluong") float soluong,
             @Param ("p_mota") String mota
     );
     @Procedure(procedureName = "SP_XoaNguyenLieuPhatSinh")
@@ -97,6 +106,8 @@ public interface QuanLyNguyenLieuTonKhoRepository extends JpaRepository<NguyenLi
     public List<Map<String, Object>> getListDonDat();
     @Query(value = "{call SP_DanhSachPhieuNhap}", nativeQuery = true)
     public List<Map<String, Object>> getListPhieuNhap();
+    @Query(value = "{call SP_TinhSoLuongKhaDung}", nativeQuery = true)
+    public List<Map<String, Object>> getSanPhamKhaDung();
     @Query(value = "{call SP_DanhSachNhaCungCap}", nativeQuery = true)
     public List<Map<String, Object>> getListNhaCungCap();
     @Query(value = "{call SP_NguyenLieuCanhBao}", nativeQuery = true)
@@ -109,4 +120,6 @@ public interface QuanLyNguyenLieuTonKhoRepository extends JpaRepository<NguyenLi
     public List<Map<String, Object>> getListCTNguyenLieuPN(@Param("p_masp") String masp);
     @Query(value = "{call SP_DanhSachNguyenLieuPhatSinh}", nativeQuery = true)
     public List<Map<String, Object>> getListNguyenLieuPhatSinh();
+    @Query(value = "{call SP_ChiTietNhapNL (:p_manl)}", nativeQuery = true)
+    public List<Map<String, Object>> getListCTNhapNL(@Param("p_manl") String manl);
 }

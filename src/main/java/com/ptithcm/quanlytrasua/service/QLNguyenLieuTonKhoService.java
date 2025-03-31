@@ -25,9 +25,11 @@ public class QLNguyenLieuTonKhoService {
         NguyenLieuDTO DTO = new NguyenLieuDTO();
         DTO.setManl((String) map.get("MANL"));
         DTO.setTennl((String) map.get("TENNL"));
-        DTO.setSoluongton(Integer.parseInt(map.get("SOLUONGTON").toString()));
+        DTO.setSoluongton(Float.parseFloat(map.get("SOLUONGTON").toString()));
         DTO.setHinhanh((String) map.get("HINHANH"));
-
+        DTO.setToithieu(Float.parseFloat(map.get("GIOIHANTON").toString()));
+        DTO.setDonvi((String) map.get("DONVI"));
+        DTO.setTrangthai(Integer.parseInt(map.get("TRANGTHAI").toString()));
         return DTO;
     }
     public DonDatMuaShow mapDDM (Map<String , Object> map)
@@ -50,6 +52,18 @@ public class QLNguyenLieuTonKhoService {
         DTO.setTennv((String) map.get("HOTEN"));
         DTO.setManv((String) map.get("MANV"));
         DTO.setNgaynhap((String) map.get("NGAYNHAP").toString());
+        DTO.setMancc((String) map.get("MANCC"));
+        DTO.setTenncc((String) map.get("TENNCC"));
+
+        return DTO;
+    }
+    public SanPhamKhaDung mapKhaDung (Map<String , Object> map)
+    {
+        SanPhamKhaDung DTO = new SanPhamKhaDung();
+        DTO.setIdctsp(Integer.parseInt(map.get("IDCTSP").toString()));
+        DTO.setTensp((String) map.get("TENSP"));
+        DTO.setMasize((String) map.get("MASIZE"));
+        DTO.setSoluongkhadung(Float.parseFloat(map.get("SOLUONGKHADUNG").toString()));
 
         return DTO;
     }
@@ -68,7 +82,8 @@ public class QLNguyenLieuTonKhoService {
         NguyenLieuNhap DTO = new NguyenLieuNhap();
         DTO.setManl((String) map.get("MANL"));
         DTO.setTennl((String) map.get("TENNL"));
-        DTO.setSoluong(Integer.parseInt(map.get("SOLUONG").toString()));
+        DTO.setDonvi((String) map.get("DONVI"));
+        DTO.setSoluong(Float.parseFloat(map.get("SOLUONG").toString()));
         return DTO;
     }
     public NguyenLieuNhap mapCTPN (Map<String , Object> map)
@@ -76,7 +91,8 @@ public class QLNguyenLieuTonKhoService {
         NguyenLieuNhap DTO = new NguyenLieuNhap();
         DTO.setManl((String) map.get("MANL"));
         DTO.setTennl((String) map.get("TENNL"));
-        DTO.setSoluong(Integer.parseInt(map.get("SOLUONG").toString()));
+        DTO.setDonvi((String) map.get("DONVI"));
+        DTO.setSoluong(Float.parseFloat(map.get("SOLUONG").toString()));
         DTO.setGianhap(Integer.parseInt(map.get("GIANHAP").toString()));
         return DTO;
     }
@@ -87,9 +103,34 @@ public class QLNguyenLieuTonKhoService {
         DTO.setTennv((String) map.get("HOTEN"));
         DTO.setManl((String) map.get("MANL"));
         DTO.setTennl((String) map.get("TENNL"));
-        DTO.setSoluong(Integer.parseInt(map.get("SOLUONG").toString()));
+        DTO.setSoluong(Float.parseFloat(map.get("SOLUONG").toString()));
         DTO.setMota((String) map.get("MOTA"));
         DTO.setNgay((String) map.get("NGAY").toString());
+        DTO.setDonvi((String) map.get("DONVI"));
+        return DTO;
+    }
+    public ChiTietNhapNL mapCTNhapNL(Map<String , Object> map)
+    {
+        ChiTietNhapNL DTO = new ChiTietNhapNL();
+        DTO.setMaphieunhap(Integer.parseInt(map.get("MAPHIEUNHAP").toString()));
+        DTO.setManl((String) map.get("MANL"));
+        DTO.setTennl((String) map.get("TENNL"));
+        DTO.setSoluong(Float.parseFloat(map.get("SOLUONG").toString()));
+        DTO.setDonvi((String) map.get("DONVI"));
+        DTO.setNgaynhap((String) map.get("NGAYNHAP").toString());
+        DTO.setGianhap(Integer.parseInt(map.get("GIANHAP").toString()));
+       if (map.get("TONKHOTRUOC") == null)
+       {
+           DTO.setTonkhotruoc(0);
+       }
+       else
+           DTO.setTonkhotruoc(Float.parseFloat(map.get("TONKHOTRUOC").toString()));
+       if (map.get("TONKHOSAU") == null)
+        {
+            DTO.setTonkhosau(0);
+        }
+        else
+            DTO.setTonkhosau(Float.parseFloat(map.get("TONKHOSAU").toString()));
         return DTO;
     }
     public List<NguyenLieuNhap> getCTDDM(int madondat){
@@ -158,6 +199,17 @@ public class QLNguyenLieuTonKhoService {
         }
         return  list;
     }
+    public List<SanPhamKhaDung> getListKhaDung(){
+
+        List<Map<String,Object>> data = repository.getSanPhamKhaDung();
+        List<SanPhamKhaDung> list = new ArrayList<>();
+        for (int i = 0 ; i< data.size();i++)
+        {
+            SanPhamKhaDung temp = mapKhaDung(data.get(i));
+            list.add(temp);
+        }
+        return  list;
+    }
     public List<NhaCungCapDTO> getlistNCC(){
 
         List<Map<String,Object>> data = repository.getListNhaCungCap();
@@ -180,10 +232,21 @@ public class QLNguyenLieuTonKhoService {
         }
         return  list;
     }
+    public List<ChiTietNhapNL> getlistCTNhapNL(String manl){
+
+        List<Map<String,Object>> data = repository.getListCTNhapNL(manl);
+        List<ChiTietNhapNL> list = new ArrayList<>();
+        for (int i = 0 ; i< data.size();i++)
+        {
+            ChiTietNhapNL temp = mapCTNhapNL(data.get(i));
+            list.add(temp);
+        }
+        return  list;
+    }
     public int themNL(NguyenLieuDTO addObject) {
 
         try {
-            repository.themNL(addObject.getManl(),addObject.getTennl(),addObject.getHinhanh());
+            repository.themNL(addObject.getManl(),addObject.getTennl(),addObject.getHinhanh(),addObject.getSoluongton(),addObject.getDonvi(),addObject.getToithieu());
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
@@ -193,7 +256,7 @@ public class QLNguyenLieuTonKhoService {
     public int updateNL(NguyenLieuDTO updateObject) {
 
         try {
-            repository.updateNL(updateObject.getManl(),updateObject.getTennl(),updateObject.getHinhanh());
+            repository.updateNL(updateObject.getManl(),updateObject.getTennl(),updateObject.getHinhanh(),updateObject.getSoluongton(),updateObject.getDonvi(),updateObject.getToithieu());
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
@@ -290,5 +353,15 @@ public class QLNguyenLieuTonKhoService {
             return 0;
         }
 
+    }
+    public int changeTrangThai(String manl) {
+
+        try {
+            repository.changeTrangThai(manl);
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+        return 1;
     }
 }

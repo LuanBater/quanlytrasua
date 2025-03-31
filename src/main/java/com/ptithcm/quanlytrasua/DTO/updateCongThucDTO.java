@@ -4,11 +4,11 @@ public class updateCongThucDTO
 {
     private String masp;
     private String manl;
-    private int soluong;
+    private float soluong;
     private String mota;
     public updateCongThucDTO(){}
 
-    public updateCongThucDTO(String masp, String manl, int soluong, String mota) {
+    public updateCongThucDTO(String masp, String manl, float soluong, String mota) {
         this.masp = masp;
         this.manl = manl;
         this.soluong = soluong;
@@ -31,11 +31,11 @@ public class updateCongThucDTO
         this.manl = manl;
     }
 
-    public int getSoluong() {
+    public float getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(int soluong) {
+    public void setSoluong(float soluong) {
         this.soluong = soluong;
     }
 

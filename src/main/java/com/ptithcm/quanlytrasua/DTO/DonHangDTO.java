@@ -12,13 +12,15 @@ public class DonHangDTO {
     private String tennv;
     private String makh;
     private String tenkh;
-    private String diachi;
+//    private String diachi;
     private int thanhtoan;
-    private String sdt;
+//    private String sdt;
     private List<CTDonHang> ctdh;
     public DonHangDTO(){}
 
-    public DonHangDTO(int madonhang, String ngaytao, int trangthai, String manv, String tennv, String makh, String tenkh, String diachi, int thanhtoan, String sdt, List<CTDonHang> ctdh) {
+
+
+    public DonHangDTO(int madonhang, String ngaytao, int trangthai, String manv, String tennv, String makh, String tenkh, int thanhtoan, List<CTDonHang> ctdh) {
         this.madonhang = madonhang;
         this.ngaytao = ngaytao;
         this.trangthai = trangthai;
@@ -26,27 +28,25 @@ public class DonHangDTO {
         this.tennv = tennv;
         this.makh = makh;
         this.tenkh = tenkh;
-        this.diachi = diachi;
         this.thanhtoan = thanhtoan;
-        this.sdt = sdt;
         this.ctdh = ctdh;
     }
 
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public String getDiachi() {
-        return diachi;
-    }
-
-    public void setDiachi(String diachi) {
-        this.diachi = diachi;
-    }
+//    public String getSdt() {
+//        return sdt;
+//    }
+//
+//    public void setSdt(String sdt) {
+//        this.sdt = sdt;
+//    }
+//
+//    public String getDiachi() {
+//        return diachi;
+//    }
+//
+//    public void setDiachi(String diachi) {
+//        this.diachi = diachi;
+//    }
 
     public int getThanhtoan() {
         return thanhtoan;

@@ -110,7 +110,7 @@ public class QLThongTinController {
 
         // Cập nhật nguyên liệu
         if (QLTTservice.themNV(nhanVien,"123456") == 0) {
-            result.put("status", "Update failed");
+            result.put("status", "Insert failed");
             return ResponseEntity.badRequest().body(result);
         } else {
             result.put("status", "OK");

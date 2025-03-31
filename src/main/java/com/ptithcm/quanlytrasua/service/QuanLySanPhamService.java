@@ -54,30 +54,32 @@ public class QuanLySanPhamService {
         }
         return 1;
     }
-    public int updateKhuyenMai(UpdateKhuyenMaiDTO DTO) {
 
-        try {
-            repository.updateKhuyenMai(DTO.getMabgcu(),DTO.getMabgmoi(),DTO.getGiaM(),DTO.getGiaL(),DTO.getIdctspM(),DTO.getIdctspL());
-        } catch (DataAccessException dataAccessException) {
-            System.out.println(dataAccessException.getMessage());
-            return 0;
-        }
-        return 1;
-    }
-    public int xoaKhuyenMai(String mabg, int idctspM, int idctspL) {
 
-        try {
-            repository.xoaKhuyenMai(mabg, idctspM,idctspL);
-        } catch (DataAccessException dataAccessException) {
-            System.out.println(dataAccessException.getMessage());
-            return 0;
-        }
-        return 1;
-    }
     public int changeGia(String maloai,int giaM, int giaL ,int idctspM, int idctspL) {
 
         try {
             repository.changeGia(maloai,giaM,giaL, idctspM,idctspL);
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+        return 1;
+    }
+    public int themChiTietGia(CT_GiaDTO ct,String maloai) {
+
+        try {
+            repository.themChiTietGia(ct.getMabg(),ct.getMasp(),maloai, ct.getGiasizeM(),ct.getGiasizeL(),ct.getNgayapdung(),ct.getNgaykt());
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+        return 1;
+    }
+    public int updateChiTietGia(CT_GiaDTO ct,String maloai) {
+
+        try {
+            repository.updateChiTietGia(ct.getMabg(),ct.getMasp(),maloai, ct.getGiasizeM(),ct.getGiasizeL(),ct.getNgayapdung(),ct.getNgaykt());
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
@@ -102,10 +104,14 @@ public class QuanLySanPhamService {
     {
 
         CT_GiaDTO ctGiaDTO = new CT_GiaDTO();
-        ctGiaDTO.setIdctsp(Integer.parseInt(ct_gia.get("IDCTSP").toString()));
+        ctGiaDTO.setMasp((String) ct_gia.get("MASP"));
+        ctGiaDTO.setTenbg((String) ct_gia.get("TENBANGGIA"));
         ctGiaDTO.setMabg((String) ct_gia.get("MABANGGIA"));
-        ctGiaDTO.setGiaban(Integer.parseInt(ct_gia.get("GIABAN").toString()));
-        ctGiaDTO.setTylegiam(Integer.parseInt(ct_gia.get("TYLEGIAM").toString()));
+        ctGiaDTO.setGiasizeM(Integer.parseInt(ct_gia.get("GIASIZE_M").toString()));
+        ctGiaDTO.setGiasizeL(Integer.parseInt(ct_gia.get("GIASIZE_L").toString()));
+        ctGiaDTO.setNgayapdung((String) ct_gia.get("NGAYAPDUNG").toString());
+        ctGiaDTO.setNgaykt((String) ct_gia.get("NGAYKT").toString());
+
         return ctGiaDTO;
     }
     public CongThucDTO mapCT (Map<String , Object> ct)
@@ -114,7 +120,8 @@ public class QuanLySanPhamService {
         CongThucDTO ctDTO = new CongThucDTO();
         ctDTO.setManl((String) ct.get("MANL"));
         ctDTO.setTennl((String) ct.get("TENNL"));
-        ctDTO.setSoluong(Integer.parseInt(ct.get("SOLUONG").toString()));
+        ctDTO.setDonvi((String) ct.get("DONVI"));
+        ctDTO.setSoluong(Float.parseFloat(ct.get("SOLUONG").toString()));
         ctDTO.setMota((String) ct.get("MOTA"));
         return ctDTO;
     }
@@ -124,11 +131,11 @@ public class QuanLySanPhamService {
         BangGiaDTO DTO = new BangGiaDTO();
         DTO.setMabg((String) ct.get("MABANGGIA"));
         DTO.setTenbg((String) ct.get("TENBANGGIA"));
-        DTO.setTylegiam(Integer.parseInt(ct.get("TYLEGIAM").toString()));
-        DTO.setNgayapdung((String) ct.get("NGAYAPDUNG").toString());
-        if (ct.get("NGAYKT")!= null) DTO.setNgaykt((String) ct.get("NGAYKT").toString());
+//        DTO.setTylegiam(Integer.parseInt(ct.get("TYLEGIAM").toString()));
+//        DTO.setNgayapdung((String) ct.get("NGAYAPDUNG").toString());
+//        if (ct.get("NGAYKT")!= null) DTO.setNgaykt((String) ct.get("NGAYKT").toString());
         DTO.setManv((String) ct.get("MANV"));
-        DTO.setLoaigia((String) ct.get("LOAIGIA"));
+//        DTO.setLoaigia((String) ct.get("LOAIGIA"));
         return DTO;
     }
     public TheLoaiDTO mapTL (Map<String , Object> tl)
@@ -150,7 +157,6 @@ public class QuanLySanPhamService {
         sanPhamDTO.setGiaM(Integer.parseInt(sp.get("GIASIZEM").toString()));
         sanPhamDTO.setIdctspL(Integer.parseInt(sp.get("IDCTSPL").toString()));
         sanPhamDTO.setGiaL(Integer.parseInt(sp.get("GIASIZEL").toString()));
-        sanPhamDTO.setTylegiam(Integer.parseInt(sp.get("TYLEGIAM").toString()));
         sanPhamDTO.setKhadung(Integer.parseInt(sp.get("KHADUNG").toString()));
         return sanPhamDTO;
     }
@@ -223,17 +229,14 @@ public class QuanLySanPhamService {
         }
         return  congThuclist;
     }
-    public CT_GiaDTO getGiaSP(String masp, String masize){
+    public List<CT_GiaDTO> getGiaSP(String masp, String maloai){
 
-        List<Map<String,Object>> data = repository.getGiaSanPham(masp,masize);
-        CT_GiaDTO ct = new CT_GiaDTO();
-        if(data.size()==1) ct = mapCTGDTO(data.get(0));
-        else {
-            for (int i = 0 ; i< data.size();i++)
-            {
-                CT_GiaDTO temp = mapCTGDTO(data.get(i));
-                if(temp.getTylegiam() > 0) ct = temp;
-            }
+        List<Map<String,Object>> data = repository.getGiaSanPham(masp,maloai);
+        List<CT_GiaDTO> ct = new ArrayList<>();
+        for (int i = 0 ; i< data.size();i++)
+        {
+            CT_GiaDTO temp = mapCTGDTO(data.get(i));
+            ct.add(temp);
         }
         return  ct;
     }
@@ -247,26 +250,7 @@ public class QuanLySanPhamService {
         }
         return 1;
     }
-    public int themBangGiaKM(BangGiaDTO dto) {
 
-        try {
-            repository.themBangGiaKM(dto.getMabg(),dto.getTenbg(),dto.getTylegiam(),dto.getNgayapdung(),dto.getNgaykt(),dto.getManv(),dto.getLoaigia());
-        } catch (DataAccessException dataAccessException) {
-            System.out.println(dataAccessException.getMessage());
-            return 0;
-        }
-        return 1;
-    }
-    public int updateBangGiaKM(BangGiaDTO dto) {
-
-        try {
-            repository.updateBangGia(dto.getMabg(),dto.getTenbg(),dto.getTylegiam(),dto.getNgayapdung(),dto.getNgaykt());
-        } catch (DataAccessException dataAccessException) {
-            System.out.println(dataAccessException.getMessage());
-            return 0;
-        }
-        return 1;
-    }
     public List<BangGiaDTO> getlistBG(){
 
         List<Map<String,Object>> data = repository.getListBangGia();
@@ -289,17 +273,7 @@ public class QuanLySanPhamService {
         }
         return  list;
     }
-    public List<BangGiaDTO> getlistBGKhuyenMai(){
 
-        List<Map<String,Object>> data = repository.getListGiaKhuyenMai();
-        List<BangGiaDTO> list = new ArrayList<>();
-        for (int i = 0 ; i< data.size();i++)
-        {
-            BangGiaDTO temp = mapBG(data.get(i));
-            list.add(temp);
-        }
-        return  list;
-    }
     public int xoaSP(String masp){
         try {
             repository.xoaSP(masp);
@@ -310,9 +284,9 @@ public class QuanLySanPhamService {
         }
 
     }
-    public int xoaBangGia(String mabg){
+    public int xoaChiTietGia(String mabg,String masp,String maloai){
         try {
-            repository.xoaBangGia(mabg);
+            repository.xoaChiTietGia(mabg,masp,maloai);
             return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
@@ -320,6 +294,7 @@ public class QuanLySanPhamService {
         }
 
     }
+
     public int xoaCongThuc(String masp){
         try {
             repository.XoaCongThuc(masp);

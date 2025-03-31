@@ -6,14 +6,34 @@ public class PhieuNhapShow {
     private String ngaynhap;
     private String manv;
     private String tennv;
+    private String mancc;
+    private String tenncc;
     public PhieuNhapShow(){}
 
-    public PhieuNhapShow(int mapn, int madondat, String ngaynhap, String manv, String tennv) {
+    public PhieuNhapShow(int mapn, int madondat, String ngaynhap, String manv, String tennv, String mancc, String tenncc) {
         this.mapn = mapn;
         this.madondat = madondat;
         this.ngaynhap = ngaynhap;
         this.manv = manv;
         this.tennv = tennv;
+        this.mancc = mancc;
+        this.tenncc = tenncc;
+    }
+
+    public String getMancc() {
+        return mancc;
+    }
+
+    public void setMancc(String mancc) {
+        this.mancc = mancc;
+    }
+
+    public String getTenncc() {
+        return tenncc;
+    }
+
+    public void setTenncc(String tenncc) {
+        this.tenncc = tenncc;
     }
 
     public int getMapn() {

@@ -1,17 +1,27 @@
 package com.ptithcm.quanlytrasua.DTO;
 
-public class CongThucDTO {
+public class  CongThucDTO {
     private String manl;
     private String tennl;
-    private int soluong;
+    private String donvi;
+    private float soluong;
     private String mota;
     public CongThucDTO(){}
 
-    public CongThucDTO(String manl, String tennl, int soluong, String mota) {
+    public CongThucDTO(String manl, String tennl, String donvi, float soluong, String mota) {
         this.manl = manl;
         this.tennl = tennl;
+        this.donvi = donvi;
         this.soluong = soluong;
         this.mota = mota;
+    }
+
+    public String getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(String donvi) {
+        this.donvi = donvi;
     }
 
     public String getTennl() {
@@ -30,11 +40,11 @@ public class CongThucDTO {
         this.manl = manl;
     }
 
-    public int getSoluong() {
+    public float getSoluong() {
         return soluong;
     }
 
-    public void setSoluong(int soluong) {
+    public void setSoluong(float soluong) {
         this.soluong = soluong;
     }
 

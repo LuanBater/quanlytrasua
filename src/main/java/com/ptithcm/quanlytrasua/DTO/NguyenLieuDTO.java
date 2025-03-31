@@ -3,15 +3,29 @@ package com.ptithcm.quanlytrasua.DTO;
 public class NguyenLieuDTO {
     String manl;
     String tennl;
-    int soluongton;
+    float soluongton;
     String hinhanh;
+    float toithieu;
+    String donvi;
+    int trangthai;
     public NguyenLieuDTO(){}
 
-    public NguyenLieuDTO(String manl, String tennl, int soluongton, String hinhanh) {
+    public NguyenLieuDTO(String manl, String tennl, float soluongton, String hinhanh, float toithieu, String donvi, int trangthai) {
         this.manl = manl;
         this.tennl = tennl;
         this.soluongton = soluongton;
         this.hinhanh = hinhanh;
+        this.toithieu = toithieu;
+        this.donvi = donvi;
+        this.trangthai = trangthai;
+    }
+
+    public int getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(int trangthai) {
+        this.trangthai = trangthai;
     }
 
     public String getManl() {
@@ -30,12 +44,28 @@ public class NguyenLieuDTO {
         this.tennl = tennl;
     }
 
-    public int getSoluongton() {
+    public float getSoluongton() {
         return soluongton;
     }
 
-    public void setSoluongton(int soluongton) {
+    public void setSoluongton(float soluongton) {
         this.soluongton = soluongton;
+    }
+
+    public float getToithieu() {
+        return toithieu;
+    }
+
+    public void setToithieu(float toithieu) {
+        this.toithieu = toithieu;
+    }
+
+    public String getDonvi() {
+        return donvi;
+    }
+
+    public void setDonvi(String donvi) {
+        this.donvi = donvi;
     }
 
     public String getHinhanh() {

@@ -9,12 +9,12 @@ public class ThongTinSanPhamDTO {
     private int giaM;
     private int idctspL;
     private int giaL;
-    private int tylegiam;
+
     private int khadung;
     private String mabg;
     public ThongTinSanPhamDTO(){}
 
-    public ThongTinSanPhamDTO(String masp, String tensp, String maloai, String hinhanh, int idctspM, int giaM, int idctspL, int giaL, int tylegiam, int khadung, String mabg) {
+    public ThongTinSanPhamDTO(String masp, String tensp, String maloai, String hinhanh, int idctspM, int giaM, int idctspL, int giaL,  int khadung, String mabg) {
         this.masp = masp;
         this.tensp = tensp;
         this.maloai = maloai;
@@ -23,7 +23,7 @@ public class ThongTinSanPhamDTO {
         this.giaM = giaM;
         this.idctspL = idctspL;
         this.giaL = giaL;
-        this.tylegiam = tylegiam;
+
         this.khadung = khadung;
         this.mabg = mabg;
     }
@@ -44,13 +44,7 @@ public class ThongTinSanPhamDTO {
         this.idctspL = idctspL;
     }
 
-    public int getTylegiam() {
-        return tylegiam;
-    }
 
-    public void setTylegiam(int tylegiam) {
-        this.tylegiam = tylegiam;
-    }
 
     public int getKhadung() {
         return khadung;

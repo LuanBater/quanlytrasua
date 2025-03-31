@@ -3,10 +3,10 @@ package com.ptithcm.quanlytrasua.DTO;
 public class ThongKeThang {
     private int soluong;
     private String ngay;
-    private int tong;
+    private float tong;
     public ThongKeThang(){}
 
-    public ThongKeThang(int soluong, String ngay, int tong) {
+    public ThongKeThang(int soluong, String ngay, float tong) {
         this.soluong = soluong;
         this.ngay = ngay;
         this.tong = tong;
@@ -28,11 +28,11 @@ public class ThongKeThang {
         this.ngay = ngay;
     }
 
-    public int getTong() {
+    public float getTong() {
         return tong;
     }
 
-    public void setTong(int tong) {
+    public void setTong(float tong) {
         this.tong = tong;
     }
 }
