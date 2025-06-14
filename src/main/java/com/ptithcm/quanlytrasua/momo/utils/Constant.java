@@ -7,7 +7,7 @@ public class Constant {
     public static final String requestType="captureWallet";
     public static final String payType="webApp";
     public static final String redirectUrl="";
-    public static final String ipnUrl="https://f5c1-118-69-53-88.ngrok-free.app/momo_ipn";
+    public static final String ipnUrl="https://935f-2402-800-63ba-bc90-c00-c014-bd62-c7fe.ngrok-free.app/momo_ipn";
     public static final String Url="https://test-payment.momo.vn/v2/gateway/api/create";
     public static final String IDMOMO="MOMO5RGX20191128";
 }
